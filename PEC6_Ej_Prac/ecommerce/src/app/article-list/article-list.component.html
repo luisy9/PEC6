@@ -1,5 +1,5 @@
 <div class="d-flex flex-wrap justify-content-center">
-  @for( item of arrayParent; track item.articulo ) {
+  @for( item of articles; track item.articulo ) {
   <app-article
     [childArray]="item"
     [actualId]="actualId"

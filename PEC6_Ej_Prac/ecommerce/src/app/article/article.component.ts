@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { parentArray } from '../article-list/article-list.component';
+import { article } from '../article-list/article-list.component';
 
 export type ArticleEventData = {
   articulo: number,
@@ -14,7 +14,7 @@ export type ArticleEventData = {
 })
 export class ArticleComponent {
 
-  @Input() childArray!: parentArray;
+  @Input() childArray!: article;
   @Input() idArticle!: number;
   @Input() actualId!: { id: number, count: number }[];
   @Output() objectArticle: EventEmitter<ArticleEventData> = new EventEmitter();
