@@ -1,4 +1,5 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ArticleEventData } from '../article/article.component';
 import { ArticleServiceService } from '../article-service.service';
 
@@ -17,17 +18,18 @@ export interface Article {
 })
 
 export class ArticleListComponent {
+  public articlesData$!: Observable<Article[]>;
   idArticle: number = 0;
   actualId: { id: number; count: number }[] = [];
-  articles: Article[];
+  // articles: Article[];
 
   public articlesService = inject(ArticleServiceService);
 
   constructor() {
-    this.articles = this.articlesService.getArticle();
+    this.articlesData$ = this.articlesService.getArticle();
   }
 
   public objectChild($event: ArticleEventData): void {
-    this.articlesService.changeQuantity($event);
+    // this.articlesService.changeQuantity($event);
   }
 }
