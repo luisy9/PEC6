@@ -1,0 +1,47 @@
+/* .example-card {
+  max-width: 400px;
+} */
+
+.example-header-image {
+  background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+  background-size: cover;
+}
+
+p {
+  text-align: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: rgb(80, 200, 120);
+  font-size: 17px;
+}
+
+.mat-mdc-raised-button.mat-accent {
+  background-color: rgb(199, 0, 57);
+  font-size: 17px;
+}
+
+.custom-style {
+  display: none;
+}
+
+.color-card {
+  background-color: red;
+}
+
+.nonePrice {
+  color: grey;
+}
+
+.countZero {
+  background-color: red;
+}
+
+.countZeroButton {
+  display: none;
+}

@@ -1,0 +1,64 @@
+<div class="form-box-reactive">
+  <form #form="ngForm" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <h2>Form Reactive</h2>
+    <div class="div-form">
+      <div class="div-control">
+        <input
+          type="text"
+          placeholder="nombre"
+          class="input-key"
+          formControlName="name"
+        />
+        @if((form.submitted && name?.errors?.['required']) || (name?.dirty || name?.touched) && name?.errors?.['required']){
+          <span class="error-msg">El campo es requerido</span>
+        }@else if(name?.errors?.['nameArticleValidator']){
+          <span class="error-msg">El nombre no puede ser {{ name?.value }}</span>
+        }
+
+      </div>
+      <div class="div-control">
+        <input
+          type="number"
+          placeholder="precio"
+          class="input-key"
+          formControlName="price"
+        />
+        @if((form.submitted && (price?.errors?.['required']) || (price?.dirty ||
+        price?.touched) && price?.errors?.['required'])){
+        <span class="error-msg">El campo es requerido</span>
+        } @else if((form.submitted && (price?.errors?.['min']) || (price?.dirty
+        || price?.touched) && price?.errors?.['min'])) {
+        <span class="error-msg">El precio no puede ser menor a 0.1</span>
+        }
+      </div>
+
+      <div class="div-control">
+        <input
+          type="text"
+          placeholder="url img"
+          class="input-key"
+          formControlName="urlImg"
+        />
+      </div>
+      @if((form.submitted && (urlImg?.errors?.['required']) || (urlImg?.dirty || urlImg?.touched) && urlImg?.errors?.['required'])){
+        <span class="error-msg">El campo es requerido</span>
+      } @else if((form.submitted && (urlImg?.errors?.['pattern']) || (urlImg?.dirty || urlImg?.touched) && urlImg?.errors?.['pattern'])) {
+        <span class="error-msg">La url no es correcta</span>
+      }
+
+      <div class="div-control div-control-checkbox">
+        <label for="isOnSale" class="isOnSale">En venta</label>
+        <input
+          type="checkbox"
+          id="isOnSale"
+          class="checkboxIsOnSale"
+          formControlName="isOnSale"
+        />
+      </div>
+
+      <div class="div-control">
+        <button type="submit" class="buttonSubmit">Crear</button>
+      </div>
+    </div>
+  </form>
+</div>

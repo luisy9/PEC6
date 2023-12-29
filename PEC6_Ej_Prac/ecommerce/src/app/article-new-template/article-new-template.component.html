@@ -1,0 +1,70 @@
+<div class="form-box">
+  <form #article="ngForm" (ngSubmit)="createArticle(article)">
+    <div ngModelGroup="Article">
+      <h2 class="text-center">Create Wine</h2>
+
+      <input
+        type="text"
+        [ngClass]="{ 'form-control': true,
+          'is-invalid': (name.dirty && name?.errors?.['required']) || (article.submitted && name?.errors?.['required'])}"
+        name="name"
+        id="name"
+        required
+        #name="ngModel"
+        placeholder="name wine"
+        ngModel
+      />
+      @if(name.dirty || article.submitted){ @if(name.invalid){
+      <div id="name" class="invalid-feedback">The name is required</div>
+      } }
+
+      <div class="">
+        <input
+          type="number"
+          name="price"
+          [ngClass]="{ 'form-control': true,
+          'is-invalid': (price.dirty && price?.errors?.['required']) || (article.submitted && price?.errors?.['required'])}"
+          id="price"
+          #price="ngModel"
+          placeholder="name price"
+          required
+          ngModel
+        />
+        @if(price.dirty || article.submitted){ @if(price.errors?.['required']){
+        <div id="name" class="invalid-feedback">The price is required</div>
+        } @else {
+        <div id="name" class="valid-feedback">Valid</div>
+        } }
+      </div>
+
+      <div class="">
+        <input
+          type="text"
+          name="url"
+          [ngClass]="{ 'form-control': true,
+            'is-invalid': (url.dirty && (url?.errors?.['required'] || url?.errors?.['pattern'])) || (article.submitted && (url?.errors?.['required'] || url?.errors?.['pattern']))}"
+          id="url"
+          pattern="^(https?):\/\/[a-zA-Z0-9]+(\.[a-zA-Z]{2,3})$"
+          #url="ngModel"
+          ngModel
+          placeholder="name url"
+          required
+        />
+        @if(url.dirty || article.submitted){ @if(url.errors?.['required']){
+        <span class="invalid-feedback">The url is required</span>
+        }@else if (url.errors?.['pattern']) {
+        <span class="invalid-feedback">No es una url valida</span>
+        } }
+      </div>
+
+      <div class="">
+        <label for="onSale">On Sale</label>
+        <input type="checkbox" name="onSale" id="onSale" ngModel />
+      </div>
+
+      <div class="">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

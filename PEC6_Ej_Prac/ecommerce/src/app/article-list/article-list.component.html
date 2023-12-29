@@ -1,0 +1,10 @@
+<div class="d-flex flex-wrap justify-content-center">
+  @for( item of arrayParent; track item.articulo ) {
+  <app-article
+    [childArray]="item"
+    [actualId]="actualId"
+    [idArticle]="idArticle"
+    (objectArticle)="objectChild($event)"
+  ></app-article>
+  }
+</div>

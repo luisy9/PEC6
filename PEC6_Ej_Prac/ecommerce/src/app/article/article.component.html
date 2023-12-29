@@ -1,0 +1,31 @@
+<div class="card mx-5" style="width: 18rem;" [ngClass]="{'countZero': isCountZero()}">
+  <div class="card-body">
+    <h5 class="card-title">{{ childArray.articulo }}</h5>
+    <img
+      src="{{ childArray.imgArticle }}"
+      alt="{{ childArray.articulo }}"
+      style="width: 100%"
+    />
+    <p>{{ childArray.price }} €</p>
+    <div class="d-flex justify-content-between">
+      @if(childArray.onSale){
+      <a
+        href="#"
+        class="btn btn-primary"
+        (click)="sumArticle(childArray.id, 'sum')"
+        >+</a
+      >
+      @for(arti of actualId; track arti.id) { @if(arti.id === childArray.id){
+      <p [ngClass]="{'countZero': isCountZero()}">{{ arti.count }}</p>
+      } }
+      <a
+        href="#"
+        class="btn btn-danger"
+        [ngClass]="{'countZeroButton': isCountZero()}"
+        (click)="restArticle(childArray.id, 'res')"
+        >-</a
+      >
+      }
+    </div>
+  </div>
+</div>
