@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { article } from '../article-list/article-list.component';
+import { Article } from '../article-list/article-list.component';
 
 export type ArticleEventData = {
-  articulo: number,
+  articuleId: number,
   operation: string
 }
 
@@ -14,22 +14,19 @@ export type ArticleEventData = {
 })
 export class ArticleComponent {
 
-  @Input() childArray!: article;
+  @Input() article!: Article;
   @Input() idArticle!: number;
-  @Input() actualId!: { id: number, count: number }[];
-  @Output() objectArticle: EventEmitter<ArticleEventData> = new EventEmitter();
+  @Input() actualId: { id: number, count: number }[] = [];
+  @Output() articleEvent: EventEmitter<ArticleEventData> = new EventEmitter();
   isOnSale: number = 0;
 
-  isCountZero(): boolean {
-    const existingItem = this.actualId.find(e => e.id === this.childArray.id);
+  get _isCountZero(): boolean {
+    const existingItem = this.actualId.find(e => e.id === this.article.id);
     return existingItem ? existingItem.count === 0 : false;
   }
 
-  sumArticle(id: number, operation: string) {
-    this.objectArticle.emit({ articulo: id, operation: operation });
-  }
-
-  restArticle(id: number, operation: string) {
-    this.objectArticle.emit({ articulo: id, operation: operation });
+  emitArticleEvent(id: number, operation: string): void {
+    const eventData: ArticleEventData = {articuleId: id, operation};
+    this.articleEvent.emit(eventData);
   }
 }

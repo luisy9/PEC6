@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { ArticleEventData } from '../article/article.component';
 import { ArticleServiceService } from '../article-service.service';
 
-export interface article {
+export interface Article {
   id: number;
   articulo: string;
   imgArticle: string;
@@ -15,17 +15,19 @@ export interface article {
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.css']
 })
+
 export class ArticleListComponent {
   idArticle: number = 0;
   actualId: { id: number; count: number }[] = [];
-  articles: article[];
+  articles: Article[];
 
-  constructor(private articleService: ArticleServiceService) {
-    this.articles = this.articleService.getArticle();
+  public articlesService = inject(ArticleServiceService);
+
+  constructor() {
+    this.articles = this.articlesService.getArticle();
   }
 
-
   public objectChild($event: ArticleEventData): void {
-    this.articleService.changeQuantity($event);
+    this.articlesService.changeQuantity($event);
   }
 }
