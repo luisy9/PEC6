@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ArticleEventData } from '../article/article.component';
 import { ArticleServiceService } from '../article-service.service';
+import { QuantityArticle } from '../article-service.service';
 
 export interface Article {
   id: number;
@@ -19,9 +20,10 @@ export interface Article {
 
 export class ArticleListComponent {
   public articlesData$!: Observable<Article[]>;
+  public articleChange$!: Observable<QuantityArticle[]>;
   idArticle: number = 0;
+  articleId: [] = [];
   actualId: { id: number; count: number }[] = [];
-  // articles: Article[];
 
   public articlesService = inject(ArticleServiceService);
 
@@ -30,6 +32,14 @@ export class ArticleListComponent {
   }
 
   public objectChild($event: ArticleEventData): void {
-    // this.articlesService.changeQuantity($event);
+    this.articlesService.changeQuantity($event)
+    .subscribe(
+      (data: QuantityArticle[]) => {
+        this.articleId.push(data);
+      },
+      (error) => {
+        console.error(error);
+      });
+    console.log(this.articleChange$);
   }
 }

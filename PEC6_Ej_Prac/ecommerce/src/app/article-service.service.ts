@@ -29,29 +29,28 @@ export class ArticleServiceService {
     return of(this.articleList);
   }
 
-  // changeQuantity({ articuleId, operation }: OperationQuantity): Observable<QuantityArticle[]> {
-  //   if (operation === 'sum') {
-  //     const existingItem = this.actualId.find(e => e.id === articuleId);
-  //     if (!existingItem) {
-  //       this.actualId.push({ id: articuleId, quantity: 1 });
-  //     } else {
-  //       // existingItem.count += 1;
-  //     }
-  //   } else if (operation === 'res') {
-  //     const existingItem = this.actualId.find(e => e.id === articuleId);
-  //     if (!existingItem) {
-  //       this.actualId.push({ id: articuleId, quantity: 1 });
-  //     } else {
-  //       if (existingItem.quantity > 0) {
-  //         existingItem.quantity -= 1;
-  //       }
-  //     }
-  //   }
-
-  //   return this.actualId;
-  // }
-
-  createArticle() {
-
+  changeQuantity({ articuleId, operation }: OperationQuantity): Observable<QuantityArticle[]> {
+    if (operation === 'sum') {
+      const existingItem = this.actualId.find(e => e.id === articuleId);
+      if (!existingItem) {
+        this.actualId.push({ id: articuleId, quantity: 1 });
+      } else {
+        // existingItem.count += 1;
+      }
+    } else if (operation === 'res') {
+      const existingItem = this.actualId.find(e => e.id === articuleId);
+      if (!existingItem) {
+        this.actualId.push({ id: articuleId, quantity: 1 });
+      } else {
+        if (existingItem.quantity > 0) {
+          existingItem.quantity -= 1;
+        }
+      }
+    }
+    return of(this.actualId);
   }
+
+  // createArticle() {
+
+  // }
 }
