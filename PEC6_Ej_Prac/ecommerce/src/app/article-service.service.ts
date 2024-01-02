@@ -41,7 +41,7 @@ export class ArticleServiceService {
     } else if (operation === 'res') {
       this.handleOperationRes(articuleId, existingItem);
     }
-    this.quantityArticles.next({ ...this.actualId });
+    this.quantityArticles.next(this.actualId);
   }
 
   //Function of add

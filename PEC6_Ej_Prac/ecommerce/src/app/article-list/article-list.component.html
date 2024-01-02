@@ -2,7 +2,7 @@
   @for( item of articlesData$ | async; track item.articulo ) {
   <app-article
     [article]="item"
-    [actualId]="actualId"
+    [actualId]="articleChange$ | async"
     [idArticle]="idArticle"
     (articleEvent)="objectChild($event)"
   ></app-article>

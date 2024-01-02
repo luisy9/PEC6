@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Article } from '../article-list/article-list.component';
+import { QuantityArticle } from '../article-service.service';
 
 export type ArticleEventData = {
   articuleId: number,
@@ -16,13 +17,13 @@ export class ArticleComponent {
 
   @Input() article!: Article;
   @Input() idArticle!: number;
-  @Input() actualId: { id: number, count: number }[] = [];
+  @Input() actualId!: QuantityArticle[] | any;
   @Output() articleEvent: EventEmitter<ArticleEventData> = new EventEmitter();
   isOnSale: number = 0;
 
   get _isCountZero(): boolean {
-    const existingItem = this.actualId.find(e => e.id === this.article.id);
-    return existingItem ? existingItem.count === 0 : false;
+    const existingItem = this.actualId?.find((e: QuantityArticle | any) => e.id === this.article.id);
+    return existingItem ? existingItem.quantity === 0 : false;
   }
 
   emitArticleEvent(id: number, operation: string): void {

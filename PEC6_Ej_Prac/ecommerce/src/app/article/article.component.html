@@ -16,7 +16,7 @@
         >+</a
       >
       @for(arti of actualId; track arti.id) { @if(arti.id === article.id){
-      <p [ngClass]="{'countZero': _isCountZero}">{{ arti.count }}</p>
+      <p [ngClass]="{'countZero': _isCountZero}">{{ arti.quantity }}</p>
       } }
       <a
         href="#"
