@@ -17,12 +17,12 @@ export class ArticleComponent {
 
   @Input() article!: Article;
   @Input() idArticle!: number;
-  @Input() actualId!: QuantityArticle[] | any;
+  @Input() actualId!: QuantityArticle[];
   @Output() articleEvent: EventEmitter<ArticleEventData> = new EventEmitter();
   isOnSale: number = 0;
 
   get _isCountZero(): boolean {
-    const existingItem = this.actualId?.find((e: QuantityArticle | any) => e.id === this.article.id);
+    const existingItem = this.actualId?.find((e: QuantityArticle) => e.id === this.article.id);
     return existingItem ? existingItem.quantity === 0 : false;
   }
 

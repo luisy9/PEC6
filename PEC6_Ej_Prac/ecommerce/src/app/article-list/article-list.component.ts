@@ -20,7 +20,7 @@ export interface Article {
 
 export class ArticleListComponent implements OnInit {
   public articlesData$!: Observable<Article[]>;
-  public articleChange$!: Observable<QuantityArticle []>;
+  public articleChange$!: Observable<QuantityArticle[]>;
   idArticle: number = 0;
   public articleId: [] = [];
   public actualId: QuantityArticle[] = [];
