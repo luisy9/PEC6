@@ -20,7 +20,8 @@ export interface Article {
 })
 
 export class ArticleListComponent implements OnInit {
-  public articlesData$!: Observable<Article[]>;
+  // public articlesData$!: Observable<Article[]>;
+  public articles: Article[] = [];
   public articleChange$!: Observable<QuantityArticle[]>;
   idArticle: number = 0;
   public articleId: [] = [];
@@ -28,7 +29,7 @@ export class ArticleListComponent implements OnInit {
   public articlesService = inject(ArticleServiceService);
 
   constructor() {
-    this.articlesData$ = this.articlesService.getArticle();
+    // this.articlesData$ = this.articlesService.getArticle();
   }
 
   public objectChild($event: ArticleEventData): void {
@@ -36,6 +37,9 @@ export class ArticleListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.articlesService.getArticle().subscribe(article => {
+      this.articles = article;
+    })
     this.articleChange$ = this.articlesService._quantityArticle;
   }
 }

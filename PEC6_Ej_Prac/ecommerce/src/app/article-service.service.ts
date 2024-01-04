@@ -20,15 +20,21 @@ export interface QuantityArticle {
 
 export class ArticleServiceService {
   public actualId: QuantityArticle[] = [];
+  public _articlesAll: BehaviorSubject<Article[]>;
   private quantityArticles: BehaviorSubject<QuantityArticle[]>;
 
+  private articleList: Article[] = [{ id: 1, name: 'Teclado gaming', imageUrl: "https://imgs.search.brave.com/uT5TsZ61BMgxVPCAwQU0uhsa_EzU8V4OyCkuQ8Ur3s0/rs:fit:560:320:1/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi81LzVhL0Nv/bXB1dGVyX2tleWJv/YXJkX0VTX2xheW91/dC5zdmcvNjQwcHgt/Q29tcHV0ZXJfa2V5/Ym9hcmRfRVNfbGF5/b3V0LnN2Zy5wbmc", price: 10, isOnSale: true, quantityInCart: 0 },
+  { id: 2, name: 'Cascos gaming', imageUrl: "https://imgs.search.brave.com/R0TErqPQRL8eukHShkjOpjFaZZYSPdvRdWQd4kT7QZE/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NDFsNE1yUCtYTUwu/anBn", price: 20, isOnSale: true, quantityInCart: 0 },
+  { id: 3, name: 'Pantalla gaming', imageUrl: "https://imgs.search.brave.com/atxwJUNu94DnuityOIMddoy609ssIvg9_RZpyz2lYpc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pLmJs/b2dzLmVzLzZlZjk4/Zi84MTdpYndrYi05/bC5fYWNfc2wxNTAw/Xy80NTBfMTAwMC53/ZWJw", price: 50, isOnSale: false, quantityInCart: 0 }];
 
   constructor(private httpClient: HttpClient) {
+    this._articlesAll = new BehaviorSubject<Article[]>(this.articleList);
     this.quantityArticles = new BehaviorSubject<QuantityArticle[]>([]);
   }
 
   getArticle(): Observable<Article[]> {
-    return this.httpClient.get<Article[]>(`http://localhost:3000/api/articles`);
+    // return this.httpClient.get<Article[]>(`http://localhost:3000/api/articles`);
+    return this._articlesAll.asObservable();
   }
 
   changeQuantity({ articuleId, operation }: OperationQuantity): void {
@@ -68,8 +74,13 @@ export class ArticleServiceService {
   createArticle(formData: any) {
     const { name, price, urlImg, isOnSale } = formData;
 
+    if(!name || !price || !urlImg){
+      console.log('Incomplete form data for create a article');
+      return;
+    }
+
     const newForm: Article = {
-      id: this.generateId(100),
+      id: this._generateId,
       name: name,
       price: price,
       imageUrl: urlImg,
@@ -77,10 +88,11 @@ export class ArticleServiceService {
       quantityInCart: 0
     };
 
-    // this.articleList.push(newForm);
+    this.articleList.push(newForm);
+    this._articlesAll.next(this.articleList);
   }
 
-  generateId(max: number): number {
-    return Math.floor(Math.random() * max);
+  private get _generateId(): number {
+    return Math.floor(Math.random() * 100);
   }
 }
