@@ -1,14 +1,14 @@
 <div class="card mx-5" style="width: 18rem;" [ngClass]="{'countZero': _isCountZero}">
   <div class="card-body">
-    <h5 class="card-title">{{ article.articulo }}</h5>
+    <h5 class="card-title">{{ article.name }}</h5>
     <img
-      src="{{ article.imgArticle }}"
-      alt="{{ article.articulo }}"
+      src="{{ article.imageUrl }}"
+      alt="{{ article.name }}"
       style="width: 100%"
     />
     <p>{{ article.price }} €</p>
     <div class="d-flex justify-content-between">
-      @if(article.onSale){
+      @if(article.isOnSale){
       <a
         href="#"
         class="btn btn-primary"

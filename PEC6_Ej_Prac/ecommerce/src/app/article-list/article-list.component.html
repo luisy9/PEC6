@@ -1,5 +1,5 @@
 <div class="d-flex flex-wrap justify-content-center">
-  @for( item of articlesData$ | async; track item.articulo ) {
+  @for( item of articlesData$ | async; track item.id ) {
   <app-article
     [article]="item"
     [actualId]="articleChange$ | async"

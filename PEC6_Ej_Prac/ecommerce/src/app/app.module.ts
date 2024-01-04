@@ -11,12 +11,13 @@ import { routing } from './app.routes';
 import { ArticleNewReactiveComponent } from './article-new-reactive/article-new-reactive.component';
 import { ArticleNewTemplateComponent } from './article-new-template/article-new-template.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
 @NgModule({
   declarations: [AppComponent, ArticleComponent, ArticleListComponent, NavbarComponent, ArticleNewReactiveComponent, ArticleNewTemplateComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, routing, FormsModule, ReactiveFormsModule],
+  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, routing, FormsModule, ReactiveFormsModule, HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

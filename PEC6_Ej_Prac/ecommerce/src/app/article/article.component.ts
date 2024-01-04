@@ -17,7 +17,7 @@ export class ArticleComponent {
 
   @Input() article!: Article;
   @Input() idArticle!: number;
-  @Input() actualId!: QuantityArticle[];
+  @Input() actualId!: QuantityArticle[] | any;
   @Output() articleEvent: EventEmitter<ArticleEventData> = new EventEmitter();
   isOnSale: number = 0;
 

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { MyValidations } from '../utils/my-validations';
+import { ArticleServiceService } from '../article-service.service';
 
 @Component({
   selector: 'app-article-new-reactive',
@@ -11,6 +11,8 @@ import { MyValidations } from '../utils/my-validations';
 export class ArticleNewReactiveComponent implements OnInit {
 
   myForm!: FormGroup;
+  public articleService = inject(ArticleServiceService);
+
 
   constructor(private fn: FormBuilder) { }
 
@@ -24,7 +26,7 @@ export class ArticleNewReactiveComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Submited form', this.myForm.value);
+    this.articleService.createArticle(this.myForm.value);
   }
 
 

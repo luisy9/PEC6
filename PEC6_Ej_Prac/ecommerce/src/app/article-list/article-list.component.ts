@@ -6,10 +6,11 @@ import { QuantityArticle } from '../article-service.service';
 
 export interface Article {
   id: number;
-  articulo: string;
-  imgArticle: string;
+  name: string;
+  imageUrl: string;
   price: number;
-  onSale: boolean;
+  isOnSale?: boolean;
+  quantityInCart: number;
 }
 
 @Component({
