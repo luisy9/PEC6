@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { ArticleEventData } from '../article/article.component';
 import { ArticleServiceService } from '../article-service.service';
 import { QuantityArticle } from '../article-service.service';
@@ -20,7 +20,6 @@ export interface Article {
 })
 
 export class ArticleListComponent implements OnInit {
-  // public articlesData$!: Observable<Article[]>;
   public articles: Article[] = [];
   public articleChange$!: Observable<QuantityArticle[]>;
   idArticle: number = 0;
@@ -28,9 +27,7 @@ export class ArticleListComponent implements OnInit {
   public actualId: QuantityArticle[] = [];
   public articlesService = inject(ArticleServiceService);
 
-  constructor() {
-    // this.articlesData$ = this.articlesService.getArticle();
-  }
+  constructor() { }
 
   public objectChild($event: ArticleEventData): void {
     this.articlesService.changeQuantity($event);
@@ -42,4 +39,10 @@ export class ArticleListComponent implements OnInit {
     })
     this.articleChange$ = this.articlesService._quantityArticle;
   }
+
+  searchArticle($event: any) {
+    const dataInputSearch = $event.target.value;
+    this.articlesService.searchTheArticle(dataInputSearch);
+  }
+
 }
