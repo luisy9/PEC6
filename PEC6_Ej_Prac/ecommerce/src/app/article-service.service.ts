@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Article } from './article-list/article-list.component';
-import { BehaviorSubject, Observable, pipe } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 export interface OperationQuantity {
@@ -14,13 +14,18 @@ export interface QuantityArticle {
   quantity: number;
 }
 
+export interface QuantityChangeArticle {
+  id: number;
+  changeInQuantity: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 
 
 export class ArticleServiceService {
-  public actualId: QuantityArticle[] = [];
+  public actualId: QuantityChangeArticle[] = [];
   public _articlesAll: BehaviorSubject<Article[]>;
   private quantityArticles: BehaviorSubject<QuantityArticle[]>;
 
@@ -34,31 +39,21 @@ export class ArticleServiceService {
   }
 
   changeQuantity({ articuleId, operation }: OperationQuantity): void {
-    const existingItem = this.actualId.find(e => e.id === articuleId);
     if (operation === 'sum') {
-      this.handleOperationSum(articuleId, existingItem);
+      this.handleOperationSum(articuleId);
     } else if (operation === 'res') {
-      this.handleOperationRes(articuleId, existingItem);
+      this.handleOperationRes(articuleId);
     }
-    this.quantityArticles.next(this.actualId);
   }
 
   //Function of add
-  handleOperationSum(articuleId: number, itemSelected: any): any {
-    if (!itemSelected) {
-      this.actualId.push({ id: articuleId, quantity: 1 });
-    } else {
-      itemSelected.quantity += 1;
-    }
+  handleOperationSum(articuleId: number): any {
+    return this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`, {changeInQuantity: 1}).subscribe();
   }
 
   //Function for decrement
-  handleOperationRes(articleId: number, itemSelected: any): any {
-    if (!itemSelected) {
-      this.actualId.push({ id: articleId, quantity: 0 });
-    } else {
-      itemSelected.quantity -= 1;
-    }
+  handleOperationRes(articuleId: number): any {
+    return this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`, {changeInQuantity: -1}).subscribe();
   }
 
 
