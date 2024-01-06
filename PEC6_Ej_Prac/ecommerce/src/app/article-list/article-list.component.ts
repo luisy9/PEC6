@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { ArticleEventData } from '../article/article.component';
 import { ArticleServiceService } from '../article-service.service';
 import { QuantityArticle } from '../article-service.service';
@@ -21,10 +21,11 @@ export interface Article {
 
 export class ArticleListComponent implements OnInit {
   public articles: Article[] = [];
-  public articleChange$!: Observable<QuantityArticle[]>;
+  public articleChange$!: Observable<Article[]>;
+  public articlesAll$!: Observable<Article[]>;
+  public subscription!: Subscription;
   idArticle: number = 0;
   public articleId: [] = [];
-  public actualId: QuantityArticle[] = [];
   public articlesService = inject(ArticleServiceService);
 
   constructor() { }
@@ -34,11 +35,8 @@ export class ArticleListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.articlesService.getArticle().subscribe(article => {
-      console.log(article);
-      this.articles = article;
-    })
-    this.articleChange$ = this.articlesService._quantityArticle;
+    this.articlesAll$ = this.articlesService.getArticle();
+    this.subscription = this.articlesService.refresh$.subscribe(() => this.articlesAll$ = this.articlesService.getArticle())
   }
 
   searchArticle($event: any) {

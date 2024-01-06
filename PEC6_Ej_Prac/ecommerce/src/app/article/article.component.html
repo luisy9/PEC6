@@ -1,4 +1,8 @@
-<div class="card mx-5" style="width: 18rem;" [ngClass]="{'countZero': _isCountZero}">
+<div
+  class="card mx-5"
+  style="width: 18rem"
+  [ngClass]="{ countZero: _isCountZero }"
+>
   <div class="card-body">
     <h5 class="card-title">{{ article.name }}</h5>
     <img
@@ -15,13 +19,14 @@
         (click)="emitArticleEvent(article.id, 'sum')"
         >+</a
       >
-      @for(arti of actualId; track arti.id) { @if(arti.id === article.id){
-      <p [ngClass]="{'countZero': _isCountZero}">{{ arti.quantity }}</p>
-      } }
+      {{ article.quantityInCart }}
+      <!-- @for(arti of actualId; track arti.id) { @if(arti.id === article.id){
+      <p [ngClass]="{ countZero: _isCountZero }">{{ arti.quantityInCart }}</p>
+      } } -->
       <a
         href="#"
         class="btn btn-danger"
-        [ngClass]="{'countZeroButton': _isCountZero}"
+        [ngClass]="{ countZeroButton: _isCountZero }"
         (click)="emitArticleEvent(article.id, 'res')"
         >-</a
       >

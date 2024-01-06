@@ -1,7 +1,7 @@
 <div class="">
   <h1 class="text-center"><input type="text" id="searchArticle" name="searchArticle" class="searchArticle" (keyup)="searchArticle($event)" /></h1>
   <div class="d-flex flex-wrap justify-content-center">
-    @for( item of articles; track item.id ) {
+    @for( item of articlesAll$ | async; track item.id ) {
       <app-article
         [article]="item"
         [actualId]="articleChange$ | async"

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Article } from './article-list/article-list.component';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 export interface OperationQuantity {
@@ -26,16 +26,14 @@ export interface QuantityChangeArticle {
 
 export class ArticleServiceService {
   public actualId: QuantityChangeArticle[] = [];
-  public _articlesAll: BehaviorSubject<Article[]>;
-  private quantityArticles: BehaviorSubject<QuantityArticle[]>;
+  public _articlesAll: BehaviorSubject<Article[]> = new BehaviorSubject<Article[]>([]);
+  public articlesAll$: Observable<Article[]> = this._articlesAll.asObservable();
+  public refresh$ = new Subject<void>();
 
-  constructor(private httpClient: HttpClient) {
-    this._articlesAll = new BehaviorSubject<Article[]>([]);
-    this.quantityArticles = new BehaviorSubject<QuantityArticle[]>([]);
-  }
+  constructor(private httpClient: HttpClient) { }
 
   getArticle(): Observable<Article[]> {
-    return this.httpClient.get<Article[]>(`http://localhost:3000/api/articles`);
+    return this.httpClient.get<Article[]>(`http://localhost:3000/api/articles`).pipe();
   }
 
   changeQuantity({ articuleId, operation }: OperationQuantity): void {
@@ -48,17 +46,23 @@ export class ArticleServiceService {
 
   //Function of add
   handleOperationSum(articuleId: number): any {
-    return this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`, {changeInQuantity: 1}).subscribe();
+    this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`,
+      { changeInQuantity: 1 }).pipe(tap(() => {
+        this.refresh$.next();
+      })).subscribe();
   }
 
   //Function for decrement
   handleOperationRes(articuleId: number): any {
-    return this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`, {changeInQuantity: -1}).subscribe();
+    this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`,
+      { changeInQuantity: -1 }).pipe(tap(() => {
+        this.refresh$.next();
+      })).subscribe();
   }
 
 
-  get _quantityArticle(): Observable<QuantityArticle[]> {
-    return this.quantityArticles.asObservable();
+  get _refresh() {
+    return this.refresh$;
   }
 
   //Creamos un articulo
@@ -93,5 +97,4 @@ export class ArticleServiceService {
       console.log(filterArticle);
     }))
   }
-
 }
