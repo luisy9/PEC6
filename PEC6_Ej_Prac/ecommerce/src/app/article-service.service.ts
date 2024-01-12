@@ -1,23 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Article } from './article-list/article-list.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, Subject, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
-export interface OperationQuantity {
-  articuleId: number;
-  operation: string;
-}
-
-export interface QuantityArticle {
-  id: number;
-  quantity: number;
-}
-
-export interface QuantityChangeArticle {
-  id: number;
-  changeInQuantity: number;
-}
+import { NewArticle, OperationQuantity, Article } from './interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -25,76 +9,55 @@ export interface QuantityChangeArticle {
 
 
 export class ArticleServiceService {
-  public actualId: QuantityChangeArticle[] = [];
-  public _articlesAll: BehaviorSubject<Article[]> = new BehaviorSubject<Article[]>([]);
-  public articlesAll$: Observable<Article[]> = this._articlesAll.asObservable();
-  public refresh$ = new Subject<void>();
 
+  private _refresh$ = new Subject<number>();
   constructor(private httpClient: HttpClient) { }
 
   getArticle(): Observable<Article[]> {
-    return this.httpClient.get<Article[]>(`http://localhost:3000/api/articles`).pipe();
+    const url: string = `http://localhost:3000/api/articles`;
+    return this.httpClient.get<Article[]>(url);
   }
 
-  changeQuantity({ articuleId, operation }: OperationQuantity): void {
+  get refresh$(): Observable<any> {
+    return this._refresh$;
+  }
+
+  //Cambiar la cantidad de los productos haciendo una consulta para cambiarlo en la api, y luego recoger los datos.
+  changeQuantityArticles({ articleId, operation }: OperationQuantity) {
+    const urlWithArticleId: string = `http://localhost:3000/api/articles/${articleId}`;
     if (operation === 'sum') {
-      this.handleOperationSum(articuleId);
+      this.operationSumQuantity(urlWithArticleId, articleId);
     } else if (operation === 'res') {
-      this.handleOperationRes(articuleId);
+      this.operationResQuantity(urlWithArticleId, articleId);
     }
   }
 
-  //Function of add
-  handleOperationSum(articuleId: number): any {
-    this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`,
-      { changeInQuantity: 1 }).pipe(tap(() => {
-        this.refresh$.next();
+  operationSumQuantity(urlWithArticleId: string, articleId: number): any {
+    this.httpClient.patch<string>(`${urlWithArticleId}`,
+      { changeInQuantity: 1 }).pipe(tap((res: any) => {
+        this._refresh$.next(articleId);
       })).subscribe();
   }
 
-  //Function for decrement
-  handleOperationRes(articuleId: number): any {
-    this.httpClient.patch<OperationQuantity>(`http://localhost:3000/api/articles/${articuleId}`,
-      { changeInQuantity: -1 }).pipe(tap(() => {
-        this.refresh$.next();
+  operationResQuantity(urlWithArticleId: string, articleId: number) {
+    this.httpClient.patch<string>(`${urlWithArticleId}`,
+      { changeInQuantity: -1 }).pipe(tap((res: any) => {
+        this._refresh$.next(articleId);
       })).subscribe();
   }
 
-
-  get _refresh() {
-    return this.refresh$;
-  }
-
-  //Creamos un articulo
-  createArticle(formData: any) {
+  createArticle(formData: NewArticle) {
     const { name, price, urlImg, isOnSale } = formData;
-
-    if (!name || !price || !urlImg) {
-      console.log('Incomplete form data for create a article');
-      return;
-    }
-
-    const newForm = {
+    const article: NewArticle = {
       name: name,
       price: price,
-      imageUrl: urlImg,
-      isOnSale: isOnSale,
-      quantityInCart: 0
-    };
+      urlImg: urlImg,
+      isOnSale: isOnSale
+    }
 
-    //Consulta a la api
-    this.httpClient.post<Article>(`http://localhost:3000/api/articles`, { ...newForm }).subscribe({
-      error: error => {
-        console.log('La consulta ha ido con exito', error);
-      }
-    });
-  }
-
-  //Lo que quiero hacer es devolver el array filtrado de los articulos
-  searchTheArticle(dataInput: any) {
-    this._articlesAll.pipe(map(article => {
-      const filterArticle = article.filter((art) => art === dataInput);
-      console.log(filterArticle);
-    }))
+    // Creamos nuevo atriculo
+    this.httpClient.post<Article[]>(`http://localhost:3000/api/articles`, { ...article }).subscribe({
+      error: error => console.log('La consulta no ha funcionado!', error)
+    })
   }
 }

@@ -1,15 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
-import { ArticleEventData } from '../article/article.component';
+import { Observable, Subscription, of } from 'rxjs';
+import { map } from 'rxjs';
 import { ArticleServiceService } from '../article-service.service';
-import { QuantityArticle } from '../article-service.service';
+import { OperationQuantity } from '../interfaces/interfaces';
 
 export interface Article {
   id: number;
   name: string;
   imageUrl: string;
   price: number;
-  isOnSale?: boolean;
+  isOnSale: boolean;
   quantityInCart: number;
 }
 
@@ -22,26 +22,48 @@ export interface Article {
 export class ArticleListComponent implements OnInit {
   public articles: Article[] = [];
   public articleChange$!: Observable<Article[]>;
-  public articlesAll$!: Observable<Article[]>;
+  public articlesAll$!: Article[];
+  public changeQuantity$!: Observable<number[]>;
   public subscription!: Subscription;
-  idArticle: number = 0;
+  public idArticle: number = 0;
   public articleId: [] = [];
   public articlesService = inject(ArticleServiceService);
 
   constructor() { }
 
-  public objectChild($event: ArticleEventData): void {
-    this.articlesService.changeQuantity($event);
+  public objectChild($event: OperationQuantity): void {
+    this.articlesService.changeQuantityArticles($event);
   }
 
   ngOnInit(): void {
-    this.articlesAll$ = this.articlesService.getArticle();
-    this.subscription = this.articlesService.refresh$.subscribe(() => this.articlesAll$ = this.articlesService.getArticle())
+    this.getArticlesAll();
+    this.articlesService.refresh$.subscribe((e: number) => {
+      this.idArticle = e;
+      this.refreshDataQuantity();
+    })
+  }
+
+  refreshDataQuantity(): void {
+    this.getArticlesAll();
+  }
+
+  getArticlesAll() {
+    this.articlesService.getArticle().subscribe((article: Article[]) => {
+      this.articlesAll$ = article
+    });
   }
 
   searchArticle($event: any) {
-    const dataInputSearch = $event.target.value;
-    this.articlesService.searchTheArticle(dataInputSearch);
+    const dataInput = $event.target.value.toLowerCase();
+    this.articlesService.getArticle()
+      .pipe(
+        map(articles => articles.
+          filter(article => article.name.toLowerCase()
+            .includes(dataInput))
+        ))
+      .subscribe((article: Article[]) => {
+        this.articlesAll$ = article;
+      })
   }
 
 }

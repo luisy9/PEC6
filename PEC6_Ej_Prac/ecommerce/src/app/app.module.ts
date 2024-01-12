@@ -12,12 +12,13 @@ import { ArticleNewReactiveComponent } from './article-new-reactive/article-new-
 import { ArticleNewTemplateComponent } from './article-new-template/article-new-template.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ValidImgPipePipe } from './pipe/valid-img-pipe.pipe';
 
 
 
 @NgModule({
   declarations: [AppComponent, ArticleComponent, ArticleListComponent, NavbarComponent, ArticleNewReactiveComponent, ArticleNewTemplateComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, routing, FormsModule, ReactiveFormsModule, HttpClientModule],
+  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, routing, FormsModule, ReactiveFormsModule, HttpClientModule, ValidImgPipePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

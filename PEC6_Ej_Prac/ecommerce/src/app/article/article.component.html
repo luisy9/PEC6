@@ -6,11 +6,11 @@
   <div class="card-body">
     <h5 class="card-title">{{ article.name }}</h5>
     <img
-      src="{{ article.imageUrl }}"
+      src="{{ article.imageUrl | validImgPipe: article.imageUrl }}"
       alt="{{ article.name }}"
       style="width: 100%"
     />
-    <p>{{ article.price }} €</p>
+    <p>{{ article.price | number: '1.2' | currency: 'EUR'}}</p>
     <div class="d-flex justify-content-between">
       @if(article.isOnSale){
       <a
@@ -20,9 +20,6 @@
         >+</a
       >
       {{ article.quantityInCart }}
-      <!-- @for(arti of actualId; track arti.id) { @if(arti.id === article.id){
-      <p [ngClass]="{ countZero: _isCountZero }">{{ arti.quantityInCart }}</p>
-      } } -->
       <a
         href="#"
         class="btn btn-danger"
